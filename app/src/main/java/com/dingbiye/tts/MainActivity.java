@@ -38,4 +38,10 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         tv_speak = findViewById(R.id.tv_speak);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TtsUtil.getInstance().release();
+    }
 }

@@ -22,12 +22,46 @@ import java.util.Map;
 //import control.InitConfig;
 //import control.MySyntherizer;
 
-/**
- * Created by Administrator on 2018/2/27.
- */
 
+/**
+ *  一行代码实现语音，本语音使用了百度语音
+ *  使用方式：先在百度语音官网申请对应的appId，appKey，secretKey等，具体请上百度语音官网查看文档
+ *  然后在需要的地方初始化该语音库。
+ *  例子：
+ *         //初始化
+ *         String appID = "xxx";
+ *         String appKey = "xx";
+ *         String secretKey = "xx";
+ *         try {
+ *             TtsUtil.getInstance().initialTts(this, appID, appKey, secretKey, TtsMode.MIX);
+ *         } catch (Exception e) {
+ *             e.printStackTrace();
+ *             Log.i("tts", e.getMessage());
+ *         }
+ *         //发声
+ *         try {
+ *             TtsUtil.getInstance().speak("你好，一行实现语音的集成方式来了");
+ *         } catch (Exception e) {
+ *             e.printStackTrace();
+ *             Log.i("tts", e.getMessage());
+ *        }
+ *        //释放
+ *        TtsUtil.getInstance().release();
+ *
+ *  @param
+ *  @return
+ *  @author dby
+ *  @date 2020/8/28 17:25
+*/
 public class TtsUtil {
     private volatile static TtsUtil sTtsUtil;
+    /**
+     *  获取TtsUtil的单例
+     *  @param
+     *  @return 返回TtsUtil类
+     *  @author dby
+     *  @date 2020/8/28 17:24
+    */
     public static TtsUtil getInstance(){
         if(sTtsUtil == null){
             synchronized (TtsUtil.class){
@@ -42,11 +76,11 @@ public class TtsUtil {
 
     }
 
-    protected String appId = "21960016";
+    protected String appId = "";
 
-    protected String appKey = "GbhGfPYwm2c8duqNQc937p3d";
+    protected String appKey = "";
 
-    protected String secretKey = "FqFAsGgswLabOyY7rBEbNU9bb1oFqXQx";
+    protected String secretKey = "";
     // TtsMode.MIX; 离在线融合，在线优先； TtsMode.ONLINE 纯在线； 没有纯离线
     protected TtsMode ttsMode = TtsMode.MIX;
     /**
@@ -59,6 +93,13 @@ public class TtsUtil {
      */
     private Context context;
 //    private  String text;
+    /**
+     *  将传入的内容使用语音读出来，如果合成器为null，会抛出异常
+     *  @param content 需要读出来的文字
+     *  @return
+     *  @author dby
+     *  @date 2020/8/28 17:23
+    */
     public void speak(String content) throws Exception{
         if(mMySyntherizer == null){
             mMySyntherizer = initialTts(context, appId, appKey, secretKey, ttsMode);
@@ -67,7 +108,31 @@ public class TtsUtil {
         }
         mMySyntherizer.speak(content == null ? "" : content);
     }
+    /**
+     *  释放语音资源，在需要释放语音资源时使用
+     *  @param 
+     *  @return 
+     *  @author dby
+     *  @date 2020/8/28 17:22
+    */
+    public void release(){
+        if(mMySyntherizer != null){
+
+            mMySyntherizer.release();
+        }
+    }
     private MySyntherizer mMySyntherizer;
+    /**
+     *  初始化语音库配置
+     *  @param context 上下文环境
+     * @param appId appId
+     * @param appKey appKey
+     * @param secretKey secretKey
+     * @param ttsMode ttsMode 可选为：TtsMode.ON_LINE, TtsMode.MIX
+     *  @return 语音合成器
+     *  @author dby
+     *  @date 2020/8/28 17:32
+    */
     public MySyntherizer initialTts(Context context, String appId, String appKey, String secretKey, TtsMode ttsMode) throws Exception {
         this.appId = appId;
         this.secretKey = secretKey;
