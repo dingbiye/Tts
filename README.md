@@ -15,7 +15,7 @@
  Step 2. Add the dependency
 
           dependencies {
-                implementation 'com.github.dingbiye:Tts:t1.0'
+                implementation 'com.github.dingbiye:Tts:v1.0'
           }
 
 先在百度语音官网申请对应的appId，appKey，secretKey等，具体请上百度语音官网查看文档
